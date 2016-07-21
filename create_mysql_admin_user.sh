@@ -10,13 +10,17 @@ while [[ RET -ne 0 ]]; do
     RET=$?
 done
 
-PASS=${MYSQL_PASS:-$(pwgen -s 12 1)}
+PASS=${MYSQL_PASS:-'admin'}
+USER=${MYSQL_USER:-'admin'}
+DBNAME=${MYSQL_DBNAME:-'wordpress'}
+
 _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
-echo "=> Creating MySQL admin user with ${_word} password"
+echo "=> Creating MySQL $USER user with ${_word} password"
 
-mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
-
+mysql -uroot -e "CREATE DATABASE $DBNAME"
+mysql -uroot -e "CREATE USER '$USER'@'%' IDENTIFIED BY '$PASS'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%' WITH GRANT OPTION"
+##mysql -uroot -e database_name < file.sql
 # You can create a /mysql-setup.sh file to intialized the DB
 if [ -f /mysql-setup.sh ] ; then
   . /mysql-setup.sh
