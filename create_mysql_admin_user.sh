@@ -14,6 +14,7 @@ DBPASS=${MYSQL_PASS:-'admin'}
 DBUSER=${MYSQL_USER:-'admin'}
 DBNAME=${MYSQL_DBNAME:-'wordpress'}
 VIRTUAL_DOMAIN=${VIRTUAL_DOMAIN:-'localhost'}
+USER_EMAIL=${USER_EMAIL:-'support@'$VIRTUAL_DOMAIN}
 WP_USER=${WP_USER:-'admin'}
 WP_PASSTEMP=${WP_PASS:-'password'}
 WP_PASS=$(printf '%s' $WP_PASSTEMP | md5sum)
@@ -27,6 +28,7 @@ echo "DB NAME => $DBNAME"
 echo "WP USER => $WP_USER"
 echo "WP PASS => $WP_PASS"
 echo "WP TEMP => $WP_PASSTEMP"
+echo "WP MAIL -> $USER_EMAIL"
 echo "================================================================ "
 mysql -uroot -e "CREATE DATABASE $DBNAME"
 mysql -uroot -e "CREATE USER '$DBUSER'@'%' IDENTIFIED BY '$DBPASS'"
@@ -35,6 +37,7 @@ replace DOMAINNAMEHERE $VIRTUAL_DOMAIN -- wordpress.sql
 replace SITETITLEHERE $VIRTUAL_DOMAIN -- wordpress.sql
 replace USERNAMEHERE $WP_USER -- wordpress.sql
 replace PASSWORDHERE $WP_PASS -- wordpress.sql
+replcae USEREMAILHERE@EMAIL.COM $USER_EMAIL -- wordpress.sql
 
 replace MYSQL_DBNAME $DBNAME -- /var/www/html/wp-config.php
 replace MYSQL_USER $DBUSER -- /var/www/html/wp-config.php
