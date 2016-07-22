@@ -17,7 +17,8 @@ VIRTUAL_DOMAIN=${VIRTUAL_DOMAIN:-'localhost'}
 USER_EMAIL=${USER_EMAIL:-'support@'$VIRTUAL_DOMAIN}
 WP_USER=${WP_USER:-'admin'}
 WP_PASSTEMP=${WP_PASS:-'password'}
-WP_PASS=$(printf '%s' $WP_PASSTEMP | md5sum)
+#WP_PASS=$(printf '%s' $WP_PASSTEMP | md5sum)
+WP_PASS=$(echo -n $WP_PASSTEMP | md5sum | awk '{print $1}')
 
 _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
 echo "=> Creating MySQL $DBUSER user with ${_word} password"
