@@ -20,7 +20,14 @@ WP_PASS=$(printf '%s' $WP_PASSTEMP | md5sum)
 
 _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
 echo "=> Creating MySQL $DBUSER user with ${_word} password"
-
+echo "================================================================ "
+echo "DB USER => $DBUSER"
+echo "DB PASSWORD => $DBPASS"
+echo "DB NAME => $DBNAME"
+echo "WP USER => $WP_USER"
+echo "WP PASS => $WP_PASS"
+echo "WP TEMP => $WP_PASSTEMP"
+echo "================================================================ "
 mysql -uroot -e "CREATE DATABASE $DBNAME"
 mysql -uroot -e "CREATE USER '$DBUSER'@'%' IDENTIFIED BY '$DBPASS'"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$DBUSER'@'%' WITH GRANT OPTION"
