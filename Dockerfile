@@ -21,6 +21,9 @@ RUN rm -rf /var/lib/mysql/*
 
 # Add MySQL utils
 ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
+ADD wordpress.sql /wordpress.sql
+
+
 RUN chmod 755 /*.sh
 
 # config to enable .htaccess
@@ -28,8 +31,17 @@ ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
 # Configure /app folder with sample app
-RUN git clone https://github.com/fermayo/hello-world-lamp.git /app
-RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
+#RUN git clone https://github.com/fermayo/hello-world-lamp.git /app
+#RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
+ADD https://wordpress.org/latest.tar.gz /var/www/latest.tar.gz
+RUN cd /var/www/ && tar xvf latest.tar.gz && rm latest.tar.gz
+RUN cp -rf  /var/www/wordpress/* /var/www/html/
+RUN rm -rf /var/www/wordpress
+ADD wp-config.php /var/www/html/wp-config.php
+#RUN rm /var/www/html/index.html
+RUN chown -R www-data:www-data /var/www/
+
+
 
 #Environment variables to configure php
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
