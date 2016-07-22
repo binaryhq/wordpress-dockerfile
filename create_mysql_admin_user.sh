@@ -29,8 +29,8 @@ replace USERNAMEHERE $WP_USER -- wordpress.sql
 replace PASSWORDHERE $WP_PASS -- wordpress.sql
 
 replace MYSQL_DBNAME $DBNAME -- /var/www/html/wp-config.php
-replace MYSQL_DBNAME $DBUSER -- /var/www/html/wp-config.php
-replace MYSQL_DBNAME $DBPASS -- /var/www/html/wp-config.php
+replace MYSQL_USER $DBUSER -- /var/www/html/wp-config.php
+replace MYSQL_PASS $DBPASS -- /var/www/html/wp-config.php
 
 mysql -uroot $DBNAME < wordpress.sql
 
