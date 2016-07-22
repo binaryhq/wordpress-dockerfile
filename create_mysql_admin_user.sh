@@ -23,14 +23,14 @@ echo "=> Creating MySQL $DBUSER user with ${_word} password"
 mysql -uroot -e "CREATE DATABASE $DBNAME"
 mysql -uroot -e "CREATE USER '$DBUSER'@'%' IDENTIFIED BY '$DBPASS'"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$DBUSER'@'%' WITH GRANT OPTION"
-replace DOMAINNAMEHERE $VIRTUAL_DOMAIN wordpress.sql
-replace SITETITLEHERE $VIRTUAL_DOMAIN wordpress.sql
-replace USERNAMEHERE $WP_USER wordpress.sql
-replace PASSWORDHERE $WP_PASS wordpress.sql
+replace DOMAINNAMEHERE $VIRTUAL_DOMAIN -- wordpress.sql
+replace SITETITLEHERE $VIRTUAL_DOMAIN -- wordpress.sql
+replace USERNAMEHERE $WP_USER -- wordpress.sql
+replace PASSWORDHERE $WP_PASS -- wordpress.sql
 
-replace MYSQL_DBNAME $DBNAME /var/www/html/wp-config.php
-replace MYSQL_DBNAME $DBUSER /var/www/html/wp-config.php
-replace MYSQL_DBNAME $DBPASS /var/www/html/wp-config.php
+replace MYSQL_DBNAME $DBNAME -- /var/www/html/wp-config.php
+replace MYSQL_DBNAME $DBUSER -- /var/www/html/wp-config.php
+replace MYSQL_DBNAME $DBPASS -- /var/www/html/wp-config.php
 
 mysql -uroot $DBNAME < wordpress.sql
 
@@ -45,7 +45,7 @@ echo "=> Done!"
 echo "========================================================================"
 echo "You can now connect to this MySQL Server using:"
 echo ""
-echo "    mysql -uadmin -p$PASS -h<host> -P<port>"
+echo "    mysql -u$DBUSER -p$DBPASS -h<host> -P<port>"
 echo ""
 echo "Please remember to change the above password as soon as possible!"
 echo "MySQL user 'root' has no password but only allows local connections"
