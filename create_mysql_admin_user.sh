@@ -10,17 +10,31 @@ while [[ RET -ne 0 ]]; do
     RET=$?
 done
 
-PASS=${MYSQL_PASS:-'admin'}
-USER=${MYSQL_USER:-'admin'}
+DBPASS=${MYSQL_PASS:-'admin'}
+DBUSER=${MYSQL_USER:-'admin'}
 DBNAME=${MYSQL_DBNAME:-'wordpress'}
+VIRTUAL_DOMAIN=${VIRTUAL_DOMAIN:-'localhost'}
+WP_USER=${WP_USER:-'admin'}
+WP_PASS=${WP_PASS:-$(printf '%s' "password" | md5sum)}
 
 _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
-echo "=> Creating MySQL $USER user with ${_word} password"
+echo "=> Creating MySQL $DBUSER user with ${_word} password"
 
 mysql -uroot -e "CREATE DATABASE $DBNAME"
-mysql -uroot -e "CREATE USER '$USER'@'%' IDENTIFIED BY '$PASS'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%' WITH GRANT OPTION"
-##mysql -uroot -e database_name < file.sql
+mysql -uroot -e "CREATE USER '$DBUSER'@'%' IDENTIFIED BY '$DBPASS'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$DBUSER'@'%' WITH GRANT OPTION"
+replace DOMAINNAMEHERE $VIRTUAL_DOMAIN wordpress.sql
+replace SITETITLEHERE $VIRTUAL_DOMAIN wordpress.sql
+replace USERNAMEHERE $WP_USER wordpress.sql
+replace PASSWORDHERE $WP_PASS wordpress.sql
+
+replace MYSQL_DBNAME $DBNAME /var/www/html/wp-config.php
+replace MYSQL_DBNAME $DBUSER /var/www/html/wp-config.php
+replace MYSQL_DBNAME $DBPASS /var/www/html/wp-config.php
+
+mysql -uroot $DBNAME < wordpress.sql
+
+rm wordpress.sql
 # You can create a /mysql-setup.sh file to intialized the DB
 if [ -f /mysql-setup.sh ] ; then
   . /mysql-setup.sh
